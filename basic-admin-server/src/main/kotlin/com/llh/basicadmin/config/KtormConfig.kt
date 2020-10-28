@@ -1,10 +1,12 @@
 package com.llh.basicadmin.config
 
 import org.ktorm.database.Database
+import org.ktorm.jackson.KtormModule
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import javax.sql.DataSource
+import com.fasterxml.jackson.databind.Module
 
 /**
  *
@@ -20,5 +22,13 @@ class KtormConfig {
     @Bean
     fun database(): Database {
         return Database.connectWithSpringSupport(dataSource)
+    }
+
+    /**
+     * 序列化ktorm对象
+     */
+    @Bean
+    fun ktormModule(): Module {
+        return KtormModule()
     }
 }

@@ -35,3 +35,6 @@ logging:
         root: info
         org.ktorm: debug
         com.llh.basicadmin: debug
+
+swagger2:
+    enable: true

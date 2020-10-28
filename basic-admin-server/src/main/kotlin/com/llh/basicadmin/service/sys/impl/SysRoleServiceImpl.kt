@@ -42,7 +42,7 @@ class SysRoleServiceImpl : SysRoleService {
 
     override fun findById(id: Int): SysRole? {
         val model = DB.sequenceOf(SysRoles)
-            .find { it.id eq id and (it.removeFlag eq true) }
+            .find { it.id eq id and (it.removeFlag eq false) }
         return if (model == null) {
             logger.debug("not found role by id: $id")
             null

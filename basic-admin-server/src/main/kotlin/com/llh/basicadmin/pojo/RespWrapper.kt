@@ -1,0 +1,27 @@
+package com.llh.basicadmin.pojo
+
+import io.swagger.annotations.ApiModel
+import io.swagger.annotations.ApiModelProperty
+
+/**
+ * 响应结果包装类
+ * Created At 2020/10/28 15:31
+ *
+ * @author llh
+ */
+@ApiModel("响应结果包装类")
+data class RespWrapper(
+    @ApiModelProperty(value = "响应代码")
+    val code: Int,
+    @ApiModelProperty(value = "提示信息")
+    val msg: String?,
+    @ApiModelProperty(value = "数据域")
+    val data: Any?,
+)
+
+/**
+ * 正确响应返回数据的函数
+ */
+fun okResponse(data: Any? = null, msg: String? = null): RespWrapper {
+    return RespWrapper(200, msg, data)
+}
