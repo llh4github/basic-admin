@@ -31,10 +31,20 @@ class RoleTest {
     fun testUpdate() {
         val r = SysRole()
 //        r.roleName = "test"
-//        r.displayName = "显示名"
+        r.displayName = "显2示1名"
 //        r.remark = "没有2"
         r.id = 1
         println(sysRoleService.updateById(r))
+    }
+
+    @Test
+    fun testRemove() {
+        val model = SysRole()
+        model.id = 2
+        model.remark = "2134"
+        model.updatedBy = 3
+        sysRoleService.removeById(model)
+
     }
 
     @Test

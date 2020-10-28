@@ -23,7 +23,7 @@ interface BasicModel<E : BasicModel<E>> : Entity<E> {
  * 只读集合。
  */
 val NOT_COPY_PROPERTIES = setOf(
-    "createdTime", "createdBy", "updatedBy", "password")
+    "createdTime", "createdBy", "password")
 /**
  * 从另一个实体类中拷贝属性。
  * 通常用于更新数据库的部分字段。

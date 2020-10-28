@@ -1,5 +1,6 @@
 package com.llh.basicadmin.service
 
+import com.llh.basicadmin.model.BasicModel
 import com.llh.basicadmin.util.SpringUtils
 import org.apache.logging.log4j.kotlin.Logging
 import org.ktorm.database.Database
@@ -19,12 +20,16 @@ interface BasicService<E> : Logging {
     fun save(entity: E): Boolean
 
     /**
-     * 移除
+     * 移除。entity.id属性不能为空
+     *
+     * 此方法仅更新 [BasicModel.updatedTime]、[BasicModel.updatedBy]和[BasicModel.removeFlag]字段
      */
-    fun remove(id: Int): Boolean
+    fun removeById(entity: E): Boolean
 
     /**
      * 根据id更新信息 entity.id属性不能为空
+     *
+     * 此方法仅更新非空字段
      */
     fun updateById(entity: E): Boolean
 
