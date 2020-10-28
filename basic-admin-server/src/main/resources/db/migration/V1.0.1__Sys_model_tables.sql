@@ -9,7 +9,7 @@ CREATE TABLE `sys_user`
 
     `created_time` datetime     DEFAULT NULL,
     `created_by`   int          DEFAULT NULL,
-    `remove_flag`  tinyint(1)   DEFAULT 1,
+    `remove_flag`  tinyint(1)   DEFAULT 0,
     `updated_time` datetime     DEFAULT NULL,
     `updated_by`   int          DEFAULT NULL,
     PRIMARY KEY (`id`)
@@ -26,7 +26,7 @@ CREATE TABLE `sys_role`
 
     `created_time` datetime     DEFAULT NULL,
     `created_by`   int          DEFAULT NULL,
-    `remove_flag`  tinyint(1)   DEFAULT 1,
+    `remove_flag`  tinyint(1)   DEFAULT 0,
     `updated_time` datetime     DEFAULT NULL,
     `updated_by`   int          DEFAULT NULL,
     PRIMARY KEY (`id`)
