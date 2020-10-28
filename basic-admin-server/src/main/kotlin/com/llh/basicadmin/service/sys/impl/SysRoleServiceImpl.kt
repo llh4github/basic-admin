@@ -5,7 +5,7 @@ import com.llh.basicadmin.model.SysRole
 import com.llh.basicadmin.model.copyProperties
 import com.llh.basicadmin.service.DB
 import com.llh.basicadmin.service.sys.SysRoleService
-import org.apache.logging.log4j.kotlin.Logging
+import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
 import org.ktorm.entity.add
 import org.ktorm.entity.find
@@ -14,12 +14,13 @@ import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class SysRoleServiceImpl : SysRoleService, Logging {
+class SysRoleServiceImpl : SysRoleService {
 
     override fun save(entity: SysRole): SysRole {
         entity.createdTime = LocalDateTime.now()
         DB.sequenceOf(SysRoles)
             .add(entity)
+
         return entity
     }
 
@@ -39,9 +40,14 @@ class SysRoleServiceImpl : SysRoleService, Logging {
     }
 
     override fun findById(id: Int): SysRole? {
-        return DB.sequenceOf(SysRoles)
-            .find { it.id eq id }
-
+        val model = DB.sequenceOf(SysRoles)
+            .find { it.id eq id and (it.removeFlag eq true) }
+        return if (model == null) {
+            logger.debug("not found ")
+            null
+        } else {
+            model
+        }
     }
 
 }

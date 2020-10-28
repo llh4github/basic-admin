@@ -34,3 +34,4 @@ logging:
     level:
         root: info
         org.ktorm: debug
+        com.llh.basicadmin: debug

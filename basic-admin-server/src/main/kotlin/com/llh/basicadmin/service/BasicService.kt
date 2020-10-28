@@ -1,6 +1,7 @@
 package com.llh.basicadmin.service
 
 import com.llh.basicadmin.util.SpringUtils
+import org.apache.logging.log4j.kotlin.Logging
 import org.ktorm.database.Database
 
 /**
@@ -9,7 +10,7 @@ import org.ktorm.database.Database
  * 泛型使用[E][com.llh.basicadmin.model.BasicModel]
  * @author llh
  */
-interface BasicService<E> {
+interface BasicService<E> : Logging {
 
 
     /**
