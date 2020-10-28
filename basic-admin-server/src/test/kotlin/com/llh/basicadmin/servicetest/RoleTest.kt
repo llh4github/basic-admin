@@ -36,4 +36,12 @@ class RoleTest {
         r.id = 1
         println(sysRoleService.updateById(r))
     }
+
+    @Test
+    fun testFind() {
+
+        sysRoleService.findById(2)
+        sysRoleService.findById(-1)
+
+    }
 }

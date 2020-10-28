@@ -16,7 +16,7 @@ interface BasicService<E> : Logging {
     /**
      * 保存
      */
-    fun save(entity: E): E
+    fun save(entity: E): Boolean
 
     /**
      * 移除
@@ -41,3 +41,9 @@ interface BasicService<E> : Logging {
  */
 internal val DB = SpringUtils.getBean(Database::class.java)
 
+/**
+ * 影响一行数据。
+ *
+ * 用来判断单条数据的插入、更新、移除操作的正确性的。
+ */
+internal const val EffectOne = 1

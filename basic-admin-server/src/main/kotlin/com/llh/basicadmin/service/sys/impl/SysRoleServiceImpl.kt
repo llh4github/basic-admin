@@ -4,6 +4,7 @@ import com.llh.basicadmin.dao.SysRoles
 import com.llh.basicadmin.model.SysRole
 import com.llh.basicadmin.model.copyProperties
 import com.llh.basicadmin.service.DB
+import com.llh.basicadmin.service.EffectOne
 import com.llh.basicadmin.service.sys.SysRoleService
 import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
@@ -16,19 +17,17 @@ import java.time.LocalDateTime
 @Service
 class SysRoleServiceImpl : SysRoleService {
 
-    override fun save(entity: SysRole): SysRole {
+    override fun save(entity: SysRole): Boolean {
         entity.createdTime = LocalDateTime.now()
-        DB.sequenceOf(SysRoles)
-            .add(entity)
-
-        return entity
+        return DB.sequenceOf(SysRoles)
+            .add(entity) == EffectOne
     }
 
     override fun remove(id: Int): Boolean {
         val model = DB.sequenceOf(SysRoles)
             .find { it.id eq id }
         model?.removeFlag = true
-        return model?.flushChanges() == 1
+        return model?.flushChanges() == EffectOne
     }
 
     override fun updateById(entity: SysRole): Boolean {
@@ -36,14 +35,14 @@ class SysRoleServiceImpl : SysRoleService {
         model?.copyProperties(entity)
         model?.updatedTime = LocalDateTime.now()
         val flushChanges = model?.flushChanges()
-        return flushChanges == 1
+        return flushChanges == EffectOne
     }
 
     override fun findById(id: Int): SysRole? {
         val model = DB.sequenceOf(SysRoles)
             .find { it.id eq id and (it.removeFlag eq true) }
         return if (model == null) {
-            logger.debug("not found ")
+            logger.debug("not found role by id: $id")
             null
         } else {
             model
