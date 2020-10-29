@@ -1,5 +1,6 @@
 package com.llh.basicadmin.dao
 
+import com.llh.basicadmin.model.SysAuthority
 import com.llh.basicadmin.model.SysRole
 import com.llh.basicadmin.model.SysUser
 import org.ktorm.schema.varchar
@@ -19,5 +20,10 @@ object SysUsers : BasicDao<SysUser>("sys_user") {
 object SysRoles : BasicDao<SysRole>("sys_role") {
     val roleName = varchar("role_name").bindTo { it.roleName }
     val displayName = varchar("display_name").bindTo { it.displayName }
+    val remark = varchar("remark").bindTo { it.remark }
+}
+
+object SysAuthorities : BasicDao<SysAuthority>("sys_authority") {
+    val name = varchar("name").bindTo { it.name }
     val remark = varchar("remark").bindTo { it.remark }
 }

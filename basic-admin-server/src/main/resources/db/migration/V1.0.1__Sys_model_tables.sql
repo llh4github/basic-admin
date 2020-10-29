@@ -32,3 +32,30 @@ CREATE TABLE `sys_role`
     PRIMARY KEY (`id`)
 ) COMMENT ='角色表' ENGINE = InnoDB
                  DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `sys_authority`
+(
+    id             int auto_increment,
+
+    `name`         varchar(30) not null comment '权限名。英文。用在代码中做权限判断。',
+    `remark`       varchar(250) DEFAULT NULL comment '备注',
+
+    `created_time` datetime     DEFAULT NULL,
+    `created_by`   int          DEFAULT NULL,
+    `remove_flag`  tinyint(1)   DEFAULT 0,
+    `updated_time` datetime     DEFAULT NULL,
+    `updated_by`   int          DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) COMMENT ='权限表' ENGINE = InnoDB
+                 DEFAULT CHARSET = utf8mb4;
+
+CREATE TABLE `sys_user_authority`
+(
+    id           int auto_increment,
+
+    user_id      int not null,
+    authority_id int not null,
+
+    PRIMARY KEY (`id`)
+) COMMENT ='角色-权限关系表' ENGINE = InnoDB
+                      DEFAULT CHARSET = utf8mb4;

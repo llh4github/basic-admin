@@ -32,3 +32,10 @@ interface SysRole : BasicModel<SysRole> {
     var remark: String?
 
 }
+
+interface SysAuthority : BasicModel<SysAuthority> {
+    companion object : Entity.Factory<SysAuthority>()
+
+    var name: String
+    var remark: String?
+}
