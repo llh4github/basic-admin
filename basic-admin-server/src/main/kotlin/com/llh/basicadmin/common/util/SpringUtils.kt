@@ -1,4 +1,4 @@
-package com.llh.basicadmin.util
+package com.llh.basicadmin.common.util
 
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware

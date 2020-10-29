@@ -1,4 +1,4 @@
-package com.llh.basicadmin.exception
+package com.llh.basicadmin.common.exception
 
 import com.llh.basicadmin.pojo.RespWrapper
 import org.springframework.web.bind.MethodArgumentNotValidException

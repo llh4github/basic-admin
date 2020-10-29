@@ -5,14 +5,13 @@ import com.llh.basicadmin.pojo.RespWrapper
 import com.llh.basicadmin.pojo.okResponse
 import com.llh.basicadmin.pojo.vo.RoleVO
 import com.llh.basicadmin.service.sys.SysRoleService
-import com.llh.basicadmin.validation.AddOperate
-import com.llh.basicadmin.validation.UpdateOperate
+import com.llh.basicadmin.common.validation.AddOperate
+import com.llh.basicadmin.common.validation.UpdateOperate
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import javax.validation.Valid
 
 /**
  *

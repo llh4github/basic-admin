@@ -1,4 +1,4 @@
-package com.llh.basicadmin.config
+package com.llh.basicadmin.common.config
 
 import org.ktorm.database.Database
 import org.ktorm.jackson.KtormModule

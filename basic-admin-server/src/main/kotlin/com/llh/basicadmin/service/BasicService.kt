@@ -1,7 +1,7 @@
 package com.llh.basicadmin.service
 
 import com.llh.basicadmin.model.BasicModel
-import com.llh.basicadmin.util.SpringUtils
+import com.llh.basicadmin.common.util.SpringUtils
 import org.apache.logging.log4j.kotlin.Logging
 import org.ktorm.database.Database
 

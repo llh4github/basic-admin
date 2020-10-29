@@ -1,7 +1,7 @@
 package com.llh.basicadmin.pojo.vo
 
-import com.llh.basicadmin.validation.AddOperate
-import com.llh.basicadmin.validation.UpdateOperate
+import com.llh.basicadmin.common.validation.AddOperate
+import com.llh.basicadmin.common.validation.UpdateOperate
 import io.swagger.annotations.ApiModel
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotBlank

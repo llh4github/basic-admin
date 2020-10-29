@@ -1,4 +1,4 @@
-package com.llh.basicadmin.validation
+package com.llh.basicadmin.common.validation
 
 /**
  * 基本操作的验证类
