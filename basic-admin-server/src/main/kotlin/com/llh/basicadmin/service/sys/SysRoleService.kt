@@ -1,5 +1,6 @@
 package com.llh.basicadmin.service.sys
 
+import com.llh.basicadmin.dao.SysRoles
 import com.llh.basicadmin.model.SysRole
 import com.llh.basicadmin.service.BasicService
 
@@ -9,5 +10,5 @@ import com.llh.basicadmin.service.BasicService
  *
  * @author llh
  */
-interface SysRoleService : BasicService<SysRole> {
+interface SysRoleService : BasicService<SysRole,SysRoles> {
 }

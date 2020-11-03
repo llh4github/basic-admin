@@ -1,5 +1,6 @@
 package com.llh.basicadmin.pojo
 
+import com.llh.basicadmin.common.exception.code.BasicResponseCode
 import io.swagger.annotations.ApiModel
 import io.swagger.annotations.ApiModelProperty
 
@@ -22,6 +23,7 @@ data class RespWrapper(
 /**
  * 正确响应返回数据的函数
  */
-fun okResponse(data: Any? = null, msg: String? = null): RespWrapper {
-    return RespWrapper(200, msg, data)
+fun okResponse(data: Any? = null,
+               msg: String? = BasicResponseCode.SUCCESS.msg): RespWrapper {
+    return RespWrapper(BasicResponseCode.SUCCESS.code, msg, data)
 }
