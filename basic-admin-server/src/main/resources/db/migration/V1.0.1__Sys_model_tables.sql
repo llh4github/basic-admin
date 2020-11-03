@@ -49,11 +49,11 @@ CREATE TABLE `sys_authority`
 ) COMMENT ='权限表' ENGINE = InnoDB
                  DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `sys_user_authority`
+CREATE TABLE `sys_role_authority`
 (
     id           int auto_increment,
 
-    user_id      int not null,
+    role_id      int not null,
     authority_id int not null,
 
     PRIMARY KEY (`id`)
