@@ -35,7 +35,8 @@ class SysRoleAPI {
 
     @PostMapping(value = ["add"])
     @ApiOperation("添加角色")
-    fun add(@RequestBody @Validated(AddOperate::class) roleVO: RoleVO): RespWrapper {
+    fun add(@RequestBody @Validated(AddOperate::class)
+            roleVO: RoleVO): RespWrapper {
         val model = SysRole {
             displayName = roleVO.displayName!!
             roleName = roleVO.roleName!!
@@ -45,7 +46,8 @@ class SysRoleAPI {
 
     @PutMapping(value = ["update"])
     @ApiOperation("修改角色信息")
-    fun update(@RequestBody @Validated(UpdateOperate::class) roleVO: RoleVO): RespWrapper {
+    fun update(@RequestBody @Validated(UpdateOperate::class)
+               roleVO: RoleVO): RespWrapper {
         val model = SysRole {
             id = roleVO.id!!
             if (roleVO.displayName != null)
