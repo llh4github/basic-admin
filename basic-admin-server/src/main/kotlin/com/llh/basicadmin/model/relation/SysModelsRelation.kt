@@ -8,10 +8,18 @@ import org.ktorm.entity.Entity
  *
  * @author llh
  */
-interface SysUserAuthority : Entity<SysUserAuthority> {
-    companion object : Entity.Factory<SysUserAuthority>()
+interface SysRoleAuthority : Entity<SysRoleAuthority> {
+    companion object : Entity.Factory<SysRoleAuthority>()
 
     var id: Int
     var roleId: Int
     var authorityId: Int
+}
+
+interface SysUserRole : Entity<SysUserRole> {
+    companion object : Entity.Factory<SysUserRole>()
+
+    var id: Int
+    var roleId: Int
+    var userId: Int
 }

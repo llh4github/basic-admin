@@ -26,6 +26,13 @@ class SysRoleAPI {
     @Autowired
     private lateinit var sysRoleService: SysRoleService
 
+    @GetMapping("user/{userId}")
+    @ApiOperation("根据用户id获取所属的角色信息")
+    fun getListByUserId(@PathVariable userId: Int): RespWrapper {
+        val list: List<SysRole> = sysRoleService.getListByUserId(userId)
+        return okResponse(list)
+    }
+
     @GetMapping("{id}")
     @ApiOperation("根据id获取角色信息")
     fun getById(@PathVariable id: Int): RespWrapper {

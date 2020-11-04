@@ -20,4 +20,9 @@ interface SysRoleService : BasicService<SysRole, SysRoles> {
      * 更新角色信息及其权限信息
      */
     fun updateByIdWithAuthorities(model: SysRole, authorities: Set<Int>?): Boolean
+
+    /**
+     * 根据用户id获取所属的角色信息
+     */
+    fun getListByUserId(userId: Int): List<SysRole>
 }

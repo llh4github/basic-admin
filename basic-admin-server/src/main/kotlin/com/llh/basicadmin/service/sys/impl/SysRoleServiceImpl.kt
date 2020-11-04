@@ -2,6 +2,7 @@ package com.llh.basicadmin.service.sys.impl
 
 import com.llh.basicadmin.dao.SysRoles
 import com.llh.basicadmin.dao.relation.SysRoleAuthorities
+import com.llh.basicadmin.dao.relation.SysUserRoles
 import com.llh.basicadmin.model.SysRole
 import com.llh.basicadmin.service.DB
 import com.llh.basicadmin.service.sys.SysRoleService
@@ -36,7 +37,17 @@ class SysRoleServiceImpl : SysRoleService {
         return true
     }
 
-    // ------ private ------
+    override fun getListByUserId(userId: Int): List<SysRole> {
+        val toList = DB.sequenceOf(SysUserRoles)
+            .filter { it.userId eq userId }
+            .map { it.roleId }
+            .toList()
+        if (toList.isEmpty()) return emptyList()
+
+        return baseDB().filter { it.id.inList(toList) }
+            .toList()
+    }
+// ------ private ------
 
     /**
      * 添加角色-权限关系
