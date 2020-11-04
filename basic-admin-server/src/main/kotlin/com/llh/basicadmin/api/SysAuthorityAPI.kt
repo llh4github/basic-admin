@@ -26,6 +26,14 @@ class SysAuthorityAPI {
     @Autowired
     private lateinit var sysAuthorityService: SysAuthorityService
 
+    @GetMapping("role/{roleId}")
+    @ApiOperation("获取指定角色拥有的权限列表")
+    fun getListByRoleId(
+        @PathVariable roleId: Int): RespWrapper {
+        val list: List<SysAuthority> = sysAuthorityService.getListByRoleId(roleId)
+        return okResponse(list)
+    }
+
     @GetMapping("{id}")
     @ApiOperation("根据id获取权限元信息")
     fun getById(@PathVariable id: Int): RespWrapper {

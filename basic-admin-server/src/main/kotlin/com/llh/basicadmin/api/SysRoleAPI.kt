@@ -41,7 +41,8 @@ class SysRoleAPI {
             displayName = roleVO.displayName!!
             roleName = roleVO.roleName!!
         }
-        return okResponse(sysRoleService.save(model))
+        return okResponse(sysRoleService
+            .saveWithAuthorities(model, roleVO.authorities))
     }
 
     @PutMapping(value = ["update"])
@@ -55,6 +56,7 @@ class SysRoleAPI {
             if (roleVO.roleName != null)
                 roleName = roleVO.roleName
         }
-        return okResponse(sysRoleService.updateById(model))
+        return okResponse(sysRoleService
+            .updateByIdWithAuthorities(model, roleVO.authorities))
     }
 }

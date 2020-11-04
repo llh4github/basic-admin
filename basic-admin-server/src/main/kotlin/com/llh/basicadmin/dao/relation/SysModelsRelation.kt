@@ -10,7 +10,7 @@ import org.ktorm.schema.int
  *
  * @author llh
  */
-object SysUserAuthorities : Table<SysUserAuthority>("sys_role_authority") {
+object SysRoleAuthorities : Table<SysUserAuthority>("sys_role_authority") {
     val id = int("id").primaryKey().bindTo { it.id }
     val authorityId = int("authority_id").bindTo { it.authorityId }
     val roleId = int("role_id").bindTo { it.roleId }

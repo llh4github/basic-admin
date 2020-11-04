@@ -11,5 +11,10 @@ import com.llh.basicadmin.service.BasicService
  *
  * @author llh
  */
-interface SysAuthorityService : BasicService<SysAuthority,SysAuthorities> {
+interface SysAuthorityService :
+    BasicService<SysAuthority, SysAuthorities> {
+    /**
+     * 获取指定角色id对应的权限列表
+     */
+    fun getListByRoleId(roleId: Int): List<SysAuthority>
 }

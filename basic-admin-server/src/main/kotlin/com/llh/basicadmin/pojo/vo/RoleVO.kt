@@ -38,4 +38,7 @@ data class RoleVO(
     @field:Length(max = 30, message = "角色名在30个字符之内",
         groups = [AddOperate::class, UpdateOperate::class])
     val displayName: String?,
+
+    @ApiModelProperty(value = "角色对应权限信息的id值")
+    val authorities: Set<Int>?
 )
