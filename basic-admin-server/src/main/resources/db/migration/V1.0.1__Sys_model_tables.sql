@@ -83,3 +83,36 @@ CREATE TABLE `sys_user_role`
     UNIQUE KEY `unique_role_id_user_id` (`role_id`, `user_id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4 COMMENT ='用户-角色关系表';
+
+CREATE TABLE `sys_dict_type`
+(
+    `id`           int(11)     NOT NULL AUTO_INCREMENT,
+    `name`         varchar(30) NOT NULL COMMENT '字典类型代号。在代码里用的，仅英数',
+    `display_name` varchar(50) NOT NULL COMMENT '字典类型。给人看的。',
+    `remark`       varchar(250) DEFAULT NULL COMMENT '备注',
+    `created_time` datetime     DEFAULT NULL,
+    `created_by`   int(11)      DEFAULT NULL,
+    `remove_flag`  tinyint(1)   DEFAULT '0',
+    `updated_time` datetime     DEFAULT NULL,
+    `updated_by`   int(11)      DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='字典类型表';
+
+CREATE TABLE `sys_dict_data`
+(
+    `id`           int(11)     NOT NULL AUTO_INCREMENT,
+    `name`         varchar(30) NOT NULL COMMENT '字典类型代号。在代码里用的，仅英数',
+    `display_name` varchar(50) NOT NULL COMMENT '字典类型。给人看的。',
+    `remark`       varchar(250) DEFAULT NULL COMMENT '备注',
+    `sort_no`      tinyint(5)   DEFAULT '0' COMMENT '排序号',
+    `type_name`    varchar(30) NOT NULL COMMENT '字典类型代号。表sys_dict_type的name字段值',
+    `default_flag` tinyint(1)   DEFAULT '0' COMMENT '是否为默认值。',
+    `created_time` datetime     DEFAULT NULL,
+    `created_by`   int(11)      DEFAULT NULL,
+    `remove_flag`  tinyint(1)   DEFAULT '0',
+    `updated_time` datetime     DEFAULT NULL,
+    `updated_by`   int(11)      DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4 COMMENT ='字典类型数据表';

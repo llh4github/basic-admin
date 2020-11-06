@@ -1,8 +1,11 @@
 package com.llh.basicadmin.dao
 
-import com.llh.basicadmin.model.SysAuthority
-import com.llh.basicadmin.model.SysRole
-import com.llh.basicadmin.model.SysUser
+import com.llh.basicadmin.dao.SysAuthorities.bindTo
+import com.llh.basicadmin.dao.SysDictTypes.bindTo
+import com.llh.basicadmin.dao.SysRoles.bindTo
+import com.llh.basicadmin.model.*
+import org.ktorm.schema.boolean
+import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 
 /**
@@ -26,4 +29,19 @@ object SysRoles : BasicDao<SysRole>("sys_role") {
 object SysAuthorities : BasicDao<SysAuthority>("sys_authority") {
     val name = varchar("name").bindTo { it.name }
     val remark = varchar("remark").bindTo { it.remark }
+}
+
+object SysDictTypes : BasicDao<SysDictType>("sys_dict_type") {
+    val name = varchar("name").bindTo { it.name }
+    val displayName = varchar("display_name").bindTo { it.displayName }
+    val remark = varchar("remark").bindTo { it.remark }
+}
+
+object SysDictDates : BasicDao<SysDictData>("sys_dict_data") {
+    val name = varchar("name").bindTo { it.name }
+    val displayName = varchar("display_name").bindTo { it.displayName }
+    val remark = varchar("remark").bindTo { it.remark }
+    val typeName = varchar("type_name").bindTo { it.typeName }
+    val defaultFlag = boolean("default_flag").bindTo { it.defaultFlag }
+    val sortNo = int("sort_no").bindTo { it.sortNo }
 }
