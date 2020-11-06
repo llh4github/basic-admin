@@ -22,7 +22,7 @@ enum class BasicResponseCode(val code: Int, val msg: String) {
      * js中0为false
      */
     UNKNOWN(0, "未知错误"),
-    SUCCESS(1, "成功"),
+    SUCCESS(1, "OK"),
     AUTH_ERROR(auth_error, "授权异常"),
     DATA_ERROR(data_error, "数据异常"),
     BUSINESS_ERROR(business_error, "系统异常"),
