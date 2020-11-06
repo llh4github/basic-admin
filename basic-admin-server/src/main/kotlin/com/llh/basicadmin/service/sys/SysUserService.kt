@@ -12,4 +12,8 @@ import com.llh.basicadmin.service.BasicService
  * @author llh
  */
 interface SysUserService : BasicService<SysUser, SysUsers> {
+    /**
+     * 保存用户信息及其角色信息
+     */
+    fun saveWithRoles(model: SysUser, roleIds: Set<Int>?): Boolean
 }
