@@ -16,4 +16,9 @@ interface SysUserService : BasicService<SysUser, SysUsers> {
      * 保存用户信息及其角色信息
      */
     fun saveWithRoles(model: SysUser, roleIds: Set<Int>?): Boolean
+
+    /**
+     * 更新用户及其角色信息
+     */
+    fun updateWithRoles(model: SysUser, roleIds: Set<Int>?): Boolean
 }

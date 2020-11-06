@@ -1,6 +1,7 @@
 package com.llh.basicadmin.api
 
 import com.llh.basicadmin.common.validation.AddOperate
+import com.llh.basicadmin.common.validation.UpdateOperate
 import com.llh.basicadmin.model.SysUser
 import com.llh.basicadmin.pojo.RespWrapper
 import com.llh.basicadmin.pojo.okResponse
@@ -10,10 +11,7 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 /**
  * SysUserAPI
@@ -37,7 +35,21 @@ class SysUserAPI {
             username = userVO.username!!
             password = userVO.password!!
         }
-        val saved: Boolean = sysUserService.saveWithRoles(model, userVO.roles)
+        val saved = sysUserService.saveWithRoles(model, userVO.roles)
         return okResponse(saved)
+    }
+
+    @PutMapping(value = ["update"])
+    @ApiOperation("更新用户信息")
+    fun update(@RequestBody @Validated(UpdateOperate::class)
+               userVO: UserVO): RespWrapper {
+        val model = SysUser {
+            if (!userVO.username.isNullOrBlank())
+                username = userVO.username
+            if (!userVO.password.isNullOrBlank())
+                password = userVO.password
+        }
+        val updated = sysUserService.saveWithRoles(model, userVO.roles)
+        return okResponse(updated)
     }
 }
