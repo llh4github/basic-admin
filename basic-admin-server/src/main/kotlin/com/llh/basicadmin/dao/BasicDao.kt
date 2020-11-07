@@ -32,7 +32,7 @@ abstract class BasicDao<E : BasicModel<E>>(tableName: String) : Table<E>(tableNa
  * @param predicate 此参数虽然是调用此函数时传入，
  *      但会把所有设定的条件都会反映在生成的SQL中。
  */
-fun <E : Any, T : Table<E>> EntitySequence<E, T>.findByPage(
+fun <E : Any, T : BasicDao<E>> EntitySequence<E, T>.findByPage(
     pageNum: Int,
     pageSize: Int,
     predicate: (T) -> ColumnDeclaring<Boolean>
