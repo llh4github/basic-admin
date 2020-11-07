@@ -41,5 +41,5 @@ fun <E : Any, T : Table<E>> EntitySequence<E, T>.findByPage(
     val count = this.filter(predicate).count()
     val total = ceil(count / pageSize.toDouble()).toInt()
     val data = this.filter(predicate).drop(offset).take(pageSize).toList()
-    return PageHelper(pageNum, pageSize, total, data)
+    return PageHelper(pageNum, pageSize, total, count, data)
 }
