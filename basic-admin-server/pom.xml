@@ -60,6 +60,10 @@
         </dependency>
         <!--swagger2 依赖-->
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         <!-- 属性验证组件 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
