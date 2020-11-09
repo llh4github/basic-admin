@@ -3,8 +3,8 @@ package com.llh.basicadmin.api
 import com.llh.basicadmin.common.validation.AddOperate
 import com.llh.basicadmin.model.SysDictType
 import com.llh.basicadmin.pojo.RespWrapper
+import com.llh.basicadmin.pojo.SimpleQuery
 import com.llh.basicadmin.pojo.okResponse
-import com.llh.basicadmin.pojo.vo.SysDictDataVO
 import com.llh.basicadmin.pojo.vo.SysDictTypeVO
 import com.llh.basicadmin.service.sys.SysDictTypeService
 import io.swagger.annotations.Api
@@ -38,12 +38,19 @@ class SysDictTypeAPI {
     fun add(@RequestBody @Validated(AddOperate::class)
             typeVO: SysDictTypeVO): RespWrapper {
         val model = SysDictType {
-            name = typeVO.name
+            name = typeVO.name!!
             remark = typeVO.remark
-            displayName = typeVO.displayName
+            displayName = typeVO.displayName!!
         }
         val operate = sysDictTypeService.save(model)
         return okResponse(operate)
     }
 
+    @PostMapping(value = ["query"])
+    @ApiOperation("查询和分页")
+    fun pageAndQuery(@RequestBody @Validated
+                     pageVO: SimpleQuery<SysDictTypeVO>): RespWrapper {
+        sysDictTypeService.pageAndQuery(pageVO)
+        return okResponse()
+    }
 }
