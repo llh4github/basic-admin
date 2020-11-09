@@ -37,14 +37,17 @@ data class SysDictTypeVO(
     @field:Min(value = 0, message = "id值必须为正整数", groups = [UpdateOperate::class])
     val id: Int?,
 
-    @field:Length(max = 30, message = "不能超过30位", groups = [AddAndUpdate::class])
+    @field:Length(max = 30, message = "不能超过30位",
+        groups = [AddAndUpdate::class, UpdateOperate::class])
     @field:NotBlank(message = "不能为空", groups = [AddOperate::class])
     var name: String?,
 
-    @field:Length(max = 30, message = "不能超过30位", groups = [AddAndUpdate::class])
-    @field:NotBlank(message = "不能为空", groups = [AddOperate::class])
+    @get:Length(max = 30, message = "不能超过30位",
+        groups = [AddOperate::class, UpdateOperate::class])
+    @get:NotBlank(message = "不能为空", groups = [AddOperate::class])
     var displayName: String?,
 
-    @field:Length(max = 150, message = "不能超过150位", groups = [AddAndUpdate::class])
+    @field:Length(max = 150, message = "不能超过150位",
+        groups = [AddAndUpdate::class, UpdateOperate::class])
     var remark: String?,
 )
