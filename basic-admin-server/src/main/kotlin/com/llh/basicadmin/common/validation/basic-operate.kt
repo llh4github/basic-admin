@@ -1,5 +1,7 @@
 package com.llh.basicadmin.common.validation
 
+import javax.validation.GroupSequence
+
 /**
  * 基本操作的验证类
  *
@@ -11,3 +13,7 @@ package com.llh.basicadmin.common.validation
 
 interface AddOperate
 interface UpdateOperate
+interface QueryOperate
+
+@GroupSequence(value = [AddOperate::class, UpdateOperate::class])
+interface AddAndUpdate
