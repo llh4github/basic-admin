@@ -11,4 +11,8 @@ import com.llh.basicadmin.service.BasicService
  * @author llh
  */
 interface SysDictDataService : BasicService<SysDictData, SysDictDates> {
+    /**
+     * 根据类型名获取数据
+     */
+    fun getListByTypeName(typeName: String): List<SysDictData>
 }
