@@ -3,9 +3,9 @@ package com.llh.basicadmin.common.exception.code
 // 定义各种异常代码的起始编码。
 // 在各子异常类中递加即可
 
-internal const val business_error = 10000
-internal const val auth_error = 40100
-internal const val data_error = 80100
+private const val business_error = 10000
+private const val auth_error = 40100
+private const val data_error = 80100
 
 
 /**
