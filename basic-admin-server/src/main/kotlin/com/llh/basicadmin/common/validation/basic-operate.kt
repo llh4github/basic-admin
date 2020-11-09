@@ -15,5 +15,10 @@ interface AddOperate
 interface UpdateOperate
 interface QueryOperate
 
+/**
+ * kotlin好像不支持这么玩
+ *
+ * 观察观察
+ */
 @GroupSequence(value = [AddOperate::class, UpdateOperate::class])
 interface AddAndUpdate
