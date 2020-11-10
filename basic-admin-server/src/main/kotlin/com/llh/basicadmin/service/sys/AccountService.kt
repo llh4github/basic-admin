@@ -1,6 +1,6 @@
 package com.llh.basicadmin.service.sys
 
-import com.llh.basicadmin.pojo.AccountInfo
+import org.springframework.security.core.userdetails.UserDetailsService
 
 /**
  * 帐户信息
@@ -8,6 +8,6 @@ import com.llh.basicadmin.pojo.AccountInfo
  *
  * @author llh
  */
-interface AccountService {
+interface AccountService : UserDetailsService {
 
 }

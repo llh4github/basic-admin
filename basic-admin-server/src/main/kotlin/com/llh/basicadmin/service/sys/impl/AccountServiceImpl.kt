@@ -1,6 +1,5 @@
 package com.llh.basicadmin.service.sys.impl
 
-import com.llh.basicadmin.model.SysUser
 import com.llh.basicadmin.pojo.AccountInfo
 import com.llh.basicadmin.service.sys.AccountService
 import com.llh.basicadmin.service.sys.SysAuthorityService
@@ -8,12 +7,11 @@ import com.llh.basicadmin.service.sys.SysRoleService
 import com.llh.basicadmin.service.sys.SysUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class AccountServiceImpl : AccountService, UserDetailsService {
+class AccountServiceImpl : AccountService {
     @Autowired
     private lateinit var sysUserService: SysUserService
 
