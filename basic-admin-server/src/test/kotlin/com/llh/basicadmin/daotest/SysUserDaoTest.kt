@@ -2,12 +2,15 @@ package com.llh.basicadmin.daotest
 
 import com.llh.basicadmin.dao.SysRoles
 import com.llh.basicadmin.dao.SysUsers
+import com.llh.basicadmin.dao.findByPage
 import com.llh.basicadmin.model.SysRole
 import com.llh.basicadmin.model.SysUser
 import org.junit.jupiter.api.Test
 import org.ktorm.database.Database
+import org.ktorm.dsl.eq
 import org.ktorm.entity.add
 import org.ktorm.entity.sequenceOf
+import org.ktorm.entity.sortedBy
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
@@ -48,5 +51,14 @@ class SysUserDaoTest {
         database
             .sequenceOf(SysRoles)
             .add(r)
+    }
+
+    @Test
+    fun testPage() {
+        database.sequenceOf(SysRoles)
+            .sortedBy { it.roleName }
+            .findByPage(3, 7) {
+                it.roleName eq "a"
+            }
     }
 }
