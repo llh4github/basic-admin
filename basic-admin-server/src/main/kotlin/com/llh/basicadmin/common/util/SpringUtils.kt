@@ -2,6 +2,7 @@ package com.llh.basicadmin.common.util
 
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
+import org.springframework.core.env.Profiles
 import org.springframework.stereotype.Component
 
 /**
@@ -21,6 +22,19 @@ object SpringUtils {
         return applicationContext.getBean(c)
     }
 
+    /**
+     * 当前是否使用的是dev配置
+     */
+    fun isDevProfile(): Boolean {
+        return isProfiles("dev")
+    }
+
+    /**
+     * 当前使用的是否是指定的配置文件
+     */
+    fun isProfiles(vararg profiles: String): Boolean {
+        return applicationContext.environment.acceptsProfiles(Profiles.of(*profiles))
+    }
 }
 
 /**
