@@ -21,4 +21,9 @@ interface SysUserService : BasicService<SysUser, SysUsers> {
      * 更新用户及其角色信息
      */
     fun updateWithRoles(model: SysUser, roleIds: Set<Int>?): Boolean
+
+    /**
+     * 根据用户名查找用户信息
+     */
+    fun findByUsername(username: String): SysUser?
 }
