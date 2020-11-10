@@ -1,6 +1,11 @@
 package com.llh.basicadmin.service.sys.impl
 
+import com.llh.basicadmin.common.exception.AppException
+import com.llh.basicadmin.common.exception.code.UserError
+import com.llh.basicadmin.common.util.PwdUtil
+import com.llh.basicadmin.model.SysUser
 import com.llh.basicadmin.pojo.AccountInfo
+import com.llh.basicadmin.pojo.AccountVO
 import com.llh.basicadmin.service.sys.AccountService
 import com.llh.basicadmin.service.sys.SysAuthorityService
 import com.llh.basicadmin.service.sys.SysRoleService
@@ -31,5 +36,22 @@ class AccountServiceImpl : AccountService {
         info.addAuthorities(rList)
         info.addAuthorities(aList)
         return info
+    }
+
+    override fun register(account: AccountVO): Boolean {
+        if (sysUserService.noHasUsername(account.username))
+            throw AppException(UserError.USERNAME_DUPLICATE)
+        val model = SysUser {
+            username = account.username
+            password = PwdUtil.encode(account.password)
+            createdBy = 2
+        }
+        sysUserService.save(model)
+        return true
+    }
+
+    override fun login(account: AccountVO): Boolean {
+
+        return true
     }
 }

@@ -9,10 +9,7 @@ import org.ktorm.dsl.and
 import org.ktorm.dsl.batchInsert
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
-import org.ktorm.entity.EntitySequence
-import org.ktorm.entity.filter
-import org.ktorm.entity.find
-import org.ktorm.entity.sequenceOf
+import org.ktorm.entity.*
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -50,6 +47,14 @@ class SysUserServiceImpl : SysUserService {
                     it.removeFlag eq false)
             }
     }
+
+    override fun noHasUsername(username: String): Boolean {
+        return baseDB()
+            .filter { it.username eq username }
+            .filter { it.removeFlag eq false }
+            .count() != 0
+    }
+
     // ------ private ------
 
     /**

@@ -47,3 +47,8 @@ class AccountInfo(private val user: SysUser) : UserDetails {
         return true
     }
 }
+
+data class AccountVO(
+    val username: String,
+    val password: String,
+)

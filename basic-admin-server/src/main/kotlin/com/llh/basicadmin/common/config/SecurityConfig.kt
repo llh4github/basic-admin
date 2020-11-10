@@ -28,6 +28,9 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http {
+            csrf {
+                disable() // 取消表单请求跨域保护
+            }
             authorizeRequests {
                 authorize("/**", permitAll) // 先放行所有
             }
