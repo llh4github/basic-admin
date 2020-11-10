@@ -4,6 +4,12 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: root
         password: root
+    redis:
+        database: 0
+        host: localhost
+    cache:
+        redis:
+            time-to-live: PT8H
     flyway:
         # 启用或禁用 flyway
         enabled: true
