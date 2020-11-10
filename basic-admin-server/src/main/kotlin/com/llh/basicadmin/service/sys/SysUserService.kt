@@ -26,4 +26,11 @@ interface SysUserService : BasicService<SysUser, SysUsers> {
      * 根据用户名查找用户信息
      */
     fun findByUsername(username: String): SysUser?
+
+    /**
+     * 确认用户名不存在
+     *
+     * true ：不存在
+     */
+    fun noHasUsername(username: String): Boolean
 }
