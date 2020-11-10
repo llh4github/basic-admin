@@ -17,4 +17,6 @@ interface SysAuthorityService :
      * 获取指定角色id对应的权限列表
      */
     fun getListByRoleId(roleId: Int): List<SysAuthority>
+
+    fun getListByRoleIds(roleIds: List<Int>): List<SysAuthority>
 }

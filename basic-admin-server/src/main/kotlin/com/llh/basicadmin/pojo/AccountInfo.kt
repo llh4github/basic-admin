@@ -1,25 +1,34 @@
 package com.llh.basicadmin.pojo
 
+import com.llh.basicadmin.model.SysUser
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 /**
- *
+ * 帐户信息
  * Created At 2020/11/9 17:39
  *
  * @author llh
  */
-class AccountInfo : UserDetails {
-    override fun getAuthorities(): Set<AuthorityWrapper> {
-        return emptySet<AuthorityWrapper>()
+class AccountInfo(private val user: SysUser) : UserDetails {
+
+    private val authoritySet = mutableSetOf<GrantedAuthority>()
+
+    fun addAuthorities(authority: List<GrantedAuthority>) {
+        if (authority.isEmpty()) return
+        authoritySet.addAll(authority)
+    }
+
+    override fun getAuthorities(): Set<GrantedAuthority> {
+        return authoritySet
     }
 
     override fun getPassword(): String {
-        return ""
+        return user.password
     }
 
     override fun getUsername(): String {
-        return ""
+        return user.username
     }
 
     override fun isAccountNonExpired(): Boolean {
@@ -36,16 +45,5 @@ class AccountInfo : UserDetails {
 
     override fun isEnabled(): Boolean {
         return true
-    }
-}
-
-/**
- * 权限信息包装类
- *
- * Security框架需要
- */
-class AuthorityWrapper : GrantedAuthority {
-    override fun getAuthority(): String {
-        return ""
     }
 }

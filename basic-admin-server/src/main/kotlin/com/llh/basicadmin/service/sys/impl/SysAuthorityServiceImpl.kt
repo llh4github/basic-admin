@@ -19,13 +19,25 @@ class SysAuthorityServiceImpl : SysAuthorityService {
     override fun getListByRoleId(roleId: Int): List<SysAuthority> {
         val authorityIds = DB.sequenceOf(SysRoleAuthorities)
             .filter { it.roleId eq roleId }
-            .map { it.roleId }
+            .map { it.authorityId }
             .toList()
 
         if (authorityIds.isEmpty()) return emptyList()
         return baseDB()
             .filter { it.id.inList(authorityIds) }
             .toList()
+    }
 
+    override fun getListByRoleIds(roleIds: List<Int>): List<SysAuthority> {
+        if (roleIds.isEmpty()) return emptyList()
+        val authorityIds = DB.sequenceOf(SysRoleAuthorities)
+            .filter { it.roleId.inList(roleIds) }
+            .map { it.authorityId }
+            .toList()
+
+        if (authorityIds.isEmpty()) return emptyList()
+        return baseDB()
+            .filter { it.id.inList(authorityIds) }
+            .toList()
     }
 }

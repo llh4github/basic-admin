@@ -8,6 +8,7 @@
 package com.llh.basicadmin.model
 
 import org.ktorm.entity.Entity
+import org.springframework.security.core.GrantedAuthority
 
 /**
  * 系统用户实体类
@@ -20,20 +21,27 @@ interface SysUser : BasicModel<SysUser> {
     var status: Int
 }
 
-interface SysRole : BasicModel<SysRole> {
+interface SysRole : BasicModel<SysRole>, GrantedAuthority {
     companion object : Entity.Factory<SysRole>()
 
     var roleName: String
     var displayName: String
     var remark: String?
 
+    override fun getAuthority(): String {
+        return this.roleName
+    }
 }
 
-interface SysAuthority : BasicModel<SysAuthority> {
+interface SysAuthority : BasicModel<SysAuthority>, GrantedAuthority {
     companion object : Entity.Factory<SysAuthority>()
 
     var name: String
     var remark: String?
+
+    override fun getAuthority(): String {
+        return this.name
+    }
 }
 
 interface SysDictType : BasicModel<SysDictType> {

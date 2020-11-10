@@ -5,10 +5,13 @@ import com.llh.basicadmin.dao.relation.SysUserRoles
 import com.llh.basicadmin.model.SysUser
 import com.llh.basicadmin.service.DB
 import com.llh.basicadmin.service.sys.SysUserService
+import org.ktorm.dsl.and
 import org.ktorm.dsl.batchInsert
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
 import org.ktorm.entity.EntitySequence
+import org.ktorm.entity.filter
+import org.ktorm.entity.find
 import org.ktorm.entity.sequenceOf
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -18,6 +21,7 @@ class SysUserServiceImpl : SysUserService {
     override fun baseDB(): EntitySequence<SysUser, SysUsers> {
         return DB.sequenceOf(SysUsers)
     }
+
     @Transactional
     override fun saveWithRoles(model: SysUser,
                                roleIds: Set<Int>?): Boolean {
@@ -37,6 +41,14 @@ class SysUserServiceImpl : SysUserService {
         // 建立新关系
         addUserRoles(model, roleIds)
         return true
+    }
+
+    override fun findByUsername(username: String): SysUser? {
+        return baseDB()
+            .find {
+                it.username eq username and (
+                    it.removeFlag eq false)
+            }
     }
     // ------ private ------
 
