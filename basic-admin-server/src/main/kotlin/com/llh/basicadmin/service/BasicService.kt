@@ -74,11 +74,11 @@ interface BasicService<E : BasicModel<E>, M : BasicDao<E>> : Logging {
  *
  * 仅在service层中使用
  */
-private val DB = SpringUtils.getBean(Database::class.java)
+internal val DB = SpringUtils.getBean(Database::class.java)
 
 /**
  * 影响一行数据。
  *
  * 用来判断单条数据的插入、更新、移除操作的正确性的。
  */
-private const val EffectOne = 1
+internal const val EffectOne = 1
