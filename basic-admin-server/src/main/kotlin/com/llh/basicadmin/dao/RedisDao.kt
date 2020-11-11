@@ -2,6 +2,7 @@ package com.llh.basicadmin.dao
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Component
 import java.util.concurrent.TimeUnit
 
@@ -14,7 +15,7 @@ import java.util.concurrent.TimeUnit
 @Component
 class RedisDao {
     @Autowired
-    private lateinit var redisTemplate: RedisTemplate<String, Any>
+    private lateinit var redisTemplate: StringRedisTemplate
 
     private val defaultTEL = 3000L // temp value
 
@@ -59,7 +60,7 @@ class RedisDao {
     // ============================String=============================
 
     /**  缓存字符串 */
-    fun set(key: String, value: Any, time: Long = defaultTEL): Boolean {
+    fun set(key: String, value: String, time: Long = defaultTEL): Boolean {
         return try {
             redisTemplate.opsForValue().set(key, value, time, timeUnit4Cache)
             true
@@ -185,7 +186,7 @@ class RedisDao {
      * @param values 值 可以是多个
      * @return 成功个数。可能为空。
      */
-    fun sSet(key: String, vararg values: Any): Long? {
+    fun sSet(key: String, vararg values: String): Long? {
         return redisTemplate.opsForSet().add(key, *values)
     }
 }
