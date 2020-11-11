@@ -1,12 +1,18 @@
 package com.llh.basicadmin.servicetest
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.llh.basicadmin.common.util.JacksonUtils
 import com.llh.basicadmin.model.SysUser
-import com.llh.basicadmin.pojo.AccountInfo
+import com.llh.basicadmin.model.toJSON
 import com.llh.basicadmin.service.sys.SysUserService
 import org.junit.jupiter.api.Test
+import org.ktorm.jackson.KtormModule
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.redis.core.RedisTemplate
+import org.springframework.data.redis.core.StringRedisTemplate
 
 /**
  *
@@ -20,11 +26,23 @@ class RedisTest {
     private lateinit var redisTemplate: RedisTemplate<String, Any>
 
     @Autowired
+    private lateinit var redisTemplateStr: StringRedisTemplate
+
+    @Autowired
     private lateinit var sysUserService: SysUserService
 
     @Test
     fun testSave() {
+        val objectMapper = ObjectMapper()
+        objectMapper.registerModule(KtormModule())
+        objectMapper.registerModule(JavaTimeModule())
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         val model = sysUserService.findById(1)
-        redisTemplate.opsForValue().set("aaa", model!!)
+
+        val message = JacksonUtils.writeValueAsString(model)
+        println(message)
+        val m = JacksonUtils.readValue(message!!, SysUser::class.java)
+        println(m)
+        redisTemplateStr.opsForValue().set("aaa", model!!.toJSON())
     }
 }
