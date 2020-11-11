@@ -14,6 +14,8 @@ class AccountInfo(private val user: SysUser) : UserDetails {
 
     private val authoritySet = mutableSetOf<GrantedAuthority>()
 
+    val id: Int? = user.id
+
     fun addAuthorities(authority: List<GrantedAuthority>) {
         if (authority.isEmpty()) return
         authoritySet.addAll(authority)

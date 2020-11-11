@@ -11,10 +11,13 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
@@ -47,9 +50,33 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             csrf {
                 disable() // 取消表单请求跨域保护
             }
-            authorizeRequests {
-                authorize("/**", permitAll) // 先放行所有
+            cors {
+                disable() //
             }
+            sessionManagement {
+                // 基于token，所以不需要session
+                sessionCreationPolicy = SessionCreationPolicy.STATELESS
+            }
+            authorizeRequests {
+                authorize("/", permitAll)
+                authorize("/*.html", permitAll)
+                authorize("/**/*.js", permitAll)
+                authorize("/**/*.html", permitAll)
+                authorize("/**/*.css", permitAll)
+                authorize("/swagger/**", permitAll)
+                authorize("/actuator/**", permitAll)
+                authorize("/v2/api-docs", permitAll)
+                authorize("/swagger-ui.html", permitAll)
+                authorize("/swagger-resources/**", permitAll)
+                authorize("/druid/**", permitAll)
+                authorize("/webjars/**", permitAll)
+                authorize("/favicon.ico", permitAll)
+
+
+                authorize("/account/**", permitAll)
+                authorize()
+            }
+
             addFilterAt(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
             exceptionHandling {
                 authenticationEntryPoint = UnauthorizedEntryPoint()
@@ -62,6 +89,11 @@ class SecurityConfig : WebSecurityConfigurerAdapter() {
             ?.userDetailsService(accountService)
             ?.passwordEncoder(passwordEncoder())
         super.configure(auth)
+    }
+
+    @Bean
+    override fun authenticationManagerBean(): AuthenticationManager {
+        return super.authenticationManagerBean()
     }
 
     /**
@@ -84,9 +116,13 @@ class UnauthorizedEntryPoint : AuthenticationEntryPoint {
                           response: HttpServletResponse?,
                           e: AuthenticationException?) {
         val mapper = ObjectMapper()
+        var err = AuthError.LOGIN_ERROR
+        if (e is BadCredentialsException) {
+            err = AuthError.NAME_PWD_ERROR
+        }
         val map = mutableMapOf<String, Any>().apply {
-            this["code"] = AuthError.LOGIN_ERROR.code
-            this["msg"] = AuthError.LOGIN_ERROR.msg
+            this["code"] = err.code
+            this["msg"] = err.msg
         }
         val json = mapper.writeValueAsString(map)
         response?.characterEncoding = "utf-8"
