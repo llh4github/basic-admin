@@ -42,6 +42,21 @@ enum class BasicResponseCode(val code: Int, val msg: String) : ExpInfo {
     }
 }
 
+enum class AuthError(val code: Int, val msg: String) : ExpInfo {
+    LOGIN_ERROR(auth_error + 1, "登录错误"),
+    NAME_PWD_ERROR(auth_error + 2, "用户名或密码错误"),
+    USER_NOT_EXIST(auth_error + 3, "用户不存在"),
+    ;
+
+    override fun getExpCode(): Int {
+        return this.code
+    }
+
+    override fun getExpMsg(): String {
+        return this.msg
+    }
+}
+
 enum class DataError(val code: Int, val msg: String) : ExpInfo {
     VALIDATE_ERROR(data_error + 1, "数据验证失败"),
     ;

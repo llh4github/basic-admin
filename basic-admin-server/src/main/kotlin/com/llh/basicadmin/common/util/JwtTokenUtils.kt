@@ -5,13 +5,14 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.apache.logging.log4j.kotlin.Logging
 import org.springframework.boot.context.properties.ConfigurationProperties
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import java.time.Duration
 import java.util.*
 import javax.annotation.PostConstruct
 import javax.xml.bind.DatatypeConverter
+
+const val JWT_USERNAME = "username"
 
 /**
  *
@@ -62,6 +63,23 @@ object JwtTokenUtil : Logging {
             checkClaimsType(claims, "access")
         }
         return generateToken(subject, claims, config.accessTokenExpireTime.toMillis(), secretKey)
+    }
+
+    /**
+     * 从token中获取用户id。
+     * 默认是subject字段存放用户id
+     */
+    fun extractUserId(token: String): String? {
+        val claims = extractClaimsFrom(token)
+        return claims?.subject
+    }
+
+    /**
+     * 从token中获取用户名。
+     */
+    fun extractUsername(token: String): String? {
+        val claims = extractClaimsFrom(token)
+        return claims?.get(JWT_USERNAME) as String?
     }
 
     /**
