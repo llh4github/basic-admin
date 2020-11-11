@@ -4,6 +4,7 @@ import com.llh.basicadmin.common.exception.code.BasicResponseCode
 import com.llh.basicadmin.common.exception.code.DataError
 import com.llh.basicadmin.common.util.SpringUtils
 import com.llh.basicadmin.pojo.RespWrapper
+import org.apache.logging.log4j.kotlin.Logging
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -16,7 +17,7 @@ import java.lang.Exception
  * @author llh
  */
 @RestControllerAdvice
-class ExceptionRestHandler {
+class ExceptionRestHandler : Logging {
 
     /**
      * 处理字段验证异常
@@ -28,7 +29,7 @@ class ExceptionRestHandler {
             .fieldErrors
             .joinToString(separator = ",")
             { "" + it.defaultMessage }
-        return RespWrapper(DataError.VALIDATE_ERROR.code, msg, null)
+        return RespWrapper(DataError.VALIDATE_ERROR.code, msg)
     }
 
     @ExceptionHandler(AppException::class)
@@ -36,7 +37,8 @@ class ExceptionRestHandler {
         if (SpringUtils.isDevProfile()) {
             e.printStackTrace()
         }
-        return RespWrapper(e.info.getExpCode(), e.info.getExpMsg(), null)
+        logger.debug("App exception :", e.fillInStackTrace())
+        return RespWrapper(e.info.getExpCode(), e.info.getExpMsg())
     }
 
     /**
