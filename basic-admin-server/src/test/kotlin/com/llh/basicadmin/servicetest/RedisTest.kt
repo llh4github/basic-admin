@@ -5,11 +5,11 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.llh.basicadmin.common.util.JacksonUtils
 import com.llh.basicadmin.model.SysUser
-import com.llh.basicadmin.model.toJSON
 import com.llh.basicadmin.service.sys.SysUserService
 import org.junit.jupiter.api.Test
 import org.ktorm.jackson.KtormModule
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.data.redis.core.StringRedisTemplate
@@ -22,10 +22,9 @@ import org.springframework.data.redis.core.StringRedisTemplate
  */
 @SpringBootTest
 class RedisTest {
-    @Autowired
-    private lateinit var redisTemplate: RedisTemplate<String, Any>
 
     @Autowired
+    @Qualifier("redisTemplate")
     private lateinit var redisTemplateStr: StringRedisTemplate
 
     @Autowired
@@ -43,6 +42,9 @@ class RedisTest {
         println(message)
         val m = JacksonUtils.readValue(message!!, SysUser::class.java)
         println(m)
-        redisTemplateStr.opsForValue().set("aaa", model!!.toJSON())
+        redisTemplateStr.opsForValue().set("aaa", message)
+        val b = redisTemplateStr.opsForValue().get("aaa")
+        val c = JacksonUtils.readValue(b, SysUser::class.java)
+        println(c)
     }
 }
