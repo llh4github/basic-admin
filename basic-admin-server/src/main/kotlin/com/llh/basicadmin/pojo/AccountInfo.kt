@@ -51,4 +51,10 @@ class AccountInfo(private val user: SysUser) : UserDetails {
 data class AccountVO(
     val username: String,
     val password: String,
+    val id: Int?,
+)
+
+data class AuthTokenVO(
+    val access: String,
+    val refresh: String,
 )
