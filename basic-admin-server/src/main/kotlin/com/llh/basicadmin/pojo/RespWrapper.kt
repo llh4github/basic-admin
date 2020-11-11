@@ -17,7 +17,7 @@ data class RespWrapper(
     @ApiModelProperty(value = "提示信息")
     val msg: String?,
     @ApiModelProperty(value = "数据域")
-    val data: Any?,
+    val data: Any? = null,
 )
 
 /**
