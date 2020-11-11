@@ -1,6 +1,7 @@
 package com.llh.basicadmin.service.sys
 
 import com.llh.basicadmin.pojo.AccountVO
+import com.llh.basicadmin.pojo.AuthTokenVO
 import org.springframework.security.core.userdetails.UserDetailsService
 
 /**
@@ -11,6 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService
  */
 interface AccountService : UserDetailsService {
     fun register(account: AccountVO): Boolean
-    fun login(account: AccountVO): Boolean
+    fun login(account: AccountVO): AuthTokenVO
 
 }

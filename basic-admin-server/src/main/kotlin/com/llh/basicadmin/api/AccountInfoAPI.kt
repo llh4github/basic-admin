@@ -35,7 +35,7 @@ class AccountInfoAPI {
     @PostMapping("login")
     @ApiOperation("登录")
     fun login(account: AccountVO): RespWrapper {
-        val operation: Boolean = accountService.login(account)
+        val operation = accountService.login(account)
         return okResponse(operation)
     }
 }
