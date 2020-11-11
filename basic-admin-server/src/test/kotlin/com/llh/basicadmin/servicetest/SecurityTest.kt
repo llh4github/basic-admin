@@ -1,5 +1,6 @@
 package com.llh.basicadmin.servicetest
 
+import com.llh.basicadmin.common.util.JwtTokenUtil
 import com.llh.basicadmin.common.util.PwdUtil
 import com.llh.basicadmin.pojo.AccountInfo
 import com.llh.basicadmin.service.sys.SysUserService
@@ -35,5 +36,21 @@ class SecurityTest {
         val model = sysUserService.findById(1)
         val info = AccountInfo(model!!)
         println(info)
+    }
+
+    @Test
+    fun testConfig() {
+        println(JwtTokenUtil.config.secretKey)
+    }
+
+    @Test
+    fun testTokenGen() {
+        val m = mutableMapOf<String, Any>()
+
+        m["fff"] = "CCCC"
+        val generateToken = JwtTokenUtil.generateToken("accc", m, 12)
+        val token = JwtTokenUtil.generateAccessToken("Tom", m)
+        println(generateToken)
+        println(token)
     }
 }
