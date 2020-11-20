@@ -1,8 +1,5 @@
 package com.llh.basicadmin.dao
 
-import com.llh.basicadmin.dao.SysAuthorities.bindTo
-import com.llh.basicadmin.dao.SysDictTypes.bindTo
-import com.llh.basicadmin.dao.SysRoles.bindTo
 import com.llh.basicadmin.model.*
 import org.ktorm.schema.boolean
 import org.ktorm.schema.int
@@ -44,4 +41,11 @@ object SysDictDates : BasicDao<SysDictData>("sys_dict_data") {
     val typeName = varchar("type_name").bindTo { it.typeName }
     val defaultFlag = boolean("default_flag").bindTo { it.defaultFlag }
     val sortNo = int("sort_no").bindTo { it.sortNo }
+}
+
+object SysDepts : BasicDao<SysDept>("sys_dept") {
+    val name = varchar("name").bindTo { it.name }
+    val remark = varchar("remark").bindTo { it.remark }
+    val sortNo = int("sort_no").bindTo { it.sortNo }
+    val parentId = int("parent_id").bindTo { it.parentId }
 }

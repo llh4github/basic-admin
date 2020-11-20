@@ -5,7 +5,7 @@ CREATE TABLE `sys_dept`
     `name`         varchar(30) NOT NULL COMMENT '部门名',
     `remark`       varchar(250) DEFAULT NULL COMMENT '备注',
     `parent_id`    int(11)      DEFAULT '0' COMMENT '父部门id，默认为0',
-    `order_num`    tinyint(3)   DEFAULT '0' COMMENT '显示顺序',
+    `sort_no`      tinyint(3)   DEFAULT '0' COMMENT '显示顺序',
     `created_time` datetime     DEFAULT NULL,
     `created_by`   int(11)      DEFAULT NULL,
     `remove_flag`  tinyint(1)   DEFAULT '0',

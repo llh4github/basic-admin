@@ -68,3 +68,12 @@ interface SysDictData : BasicModel<SysDictData> {
     var typeName: String
     var defaultFlag: Boolean
 }
+
+interface SysDept : BasicModel<SysDept> {
+    companion object : Entity.Factory<SysDept>()
+
+    var name: String
+    var remark: String?
+    var sortNo: Int
+    var parentId: Int
+}
