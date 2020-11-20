@@ -7,6 +7,7 @@
  */
 package com.llh.basicadmin.model
 
+import com.llh.basicadmin.common.constant.ROLE_PREFIX
 import org.ktorm.entity.Entity
 import org.springframework.security.core.GrantedAuthority
 
@@ -25,11 +26,14 @@ interface SysRole : BasicModel<SysRole>, GrantedAuthority {
     companion object : Entity.Factory<SysRole>()
 
     var roleName: String
+
     var displayName: String
     var remark: String?
 
+    /** 获取的字符串必须以 ROLE_ 开头 */
     override fun getAuthority(): String {
-        return this.roleName
+        return if (this.roleName.startsWith(ROLE_PREFIX)) this.roleName
+        else ROLE_PREFIX + this.roleName
     }
 }
 
