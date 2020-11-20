@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
@@ -20,6 +21,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.core.AuthenticationException
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
@@ -139,41 +141,54 @@ class JwtAuthenticationTokenFilter(private var config: JwtConfig)
     : OncePerRequestFilter() {
     companion object : Logging
 
+    @Autowired
+    private lateinit var accountService: AccountService
 
-    override fun doFilterInternal(request: HttpServletRequest, response:
-    HttpServletResponse, filterChain: FilterChain) {
+    override fun doFilterInternal(request: HttpServletRequest,
+                                  response: HttpServletResponse,
+                                  filterChain: FilterChain) {
         // 拿到 authorization 对应的信息。事实上是可空的。
         val authToken: String? = request.getHeader(config.accessToken)
         val refreshToken: String? = request.getHeader(config.refreshToken)
+
         // 必须有相关信息
         if (authToken.isNullOrEmpty() || refreshToken.isNullOrEmpty()) {
             filterChain.doFilter(request, response)
             return
         }
+        // 验证 authToken 没有过期
+        if (JwtTokenUtil.validateToken(authToken)) {
+            val username = JwtTokenUtil.extractUsername(authToken)
+            if (!username.isNullOrEmpty()) {
+                saveUserInfoInSecurityContext(username)
+                filterChain.doFilter(request, response)
+                return
+            }
+        }
         // 验证 refreshToken 没有过期
-        else if (JwtTokenUtil.validateToken(refreshToken)) {
+        if (JwtTokenUtil.validateToken(refreshToken)) {
             val requestURL = request.requestURL
             // 指定接口才能访问
             if (requestURL.endsWith("/account/refresh")) {
-                saveUserInfoByToken(refreshToken)
+                val username = JwtTokenUtil.extractUsername(refreshToken)
+                if (!username.isNullOrEmpty()) {
+                    saveUserInfoInSecurityContext(refreshToken)
+                }
             }
             filterChain.doFilter(request, response)
         }
 
     }
 
-    private fun saveUserInfoByToken(token: String) {
-        // 取出账号信息（id）
-        val userId = JwtTokenUtil.extractUserId(token)
-        // TODO complete me
-//        val userDetails = userCache.fetchLoginInfo(userId)
-//        if (userDetails != null) {
-//            val authentication = UsernamePasswordAuthenticationToken(
-//                userDetails,
-//                userDetails.password,
-//                userDetails.authorities)
-//            // 将authentication信息放入到上下文对象中
-//            SecurityContextHolder.getContext().authentication = authentication
+    /**
+     * 保存用户信息到SpringSecurity上下文中
+     */
+    private fun saveUserInfoInSecurityContext(username: String) {
+        val loginUserInfo = accountService.loadUserByUsername(username)
+        SecurityContextHolder.getContext()
+            .authentication = UsernamePasswordAuthenticationToken(
+            loginUserInfo?.username,
+            loginUserInfo?.password,
+            loginUserInfo?.authorities)
     }
-
 }
