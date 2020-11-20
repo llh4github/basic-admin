@@ -16,7 +16,6 @@ object AccountCacheKey {
 
     val loginHMKey_access = "access"
     val loginHMKey_refresh = "refresh"
-    val loginHMKey_userInfo = "userInfo"
 
-    fun loginInfoKey(userId: Int) = "login-info:$userId"
+    fun loginInfoKey(userId: String) = "login-info:$userId"
 }
