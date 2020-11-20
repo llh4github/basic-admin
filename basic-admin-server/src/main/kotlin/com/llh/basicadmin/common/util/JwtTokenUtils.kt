@@ -25,7 +25,7 @@ const val JWT_USERNAME = "username"
 @ConfigurationProperties(prefix = "jwt")
 class JwtConfig {
 
-    var accessToken: String = "authorization"
+    var accessToken: String = "access_token"
 
     var refreshToken: String = "refresh_token"
 
