@@ -1,14 +1,15 @@
 package com.llh.basicadmin.common.exception
 
+import com.llh.basicadmin.common.exception.code.AuthError
 import com.llh.basicadmin.common.exception.code.BasicResponseCode
 import com.llh.basicadmin.common.exception.code.DataError
 import com.llh.basicadmin.common.util.SpringUtils
 import com.llh.basicadmin.pojo.RespWrapper
 import org.apache.logging.log4j.kotlin.Logging
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import java.lang.Exception
 
 /**
  * 统一异常处理
@@ -30,6 +31,17 @@ class ExceptionRestHandler : Logging {
             .joinToString(separator = ",")
             { "" + it.defaultMessage }
         return RespWrapper(DataError.VALIDATE_ERROR.code, msg)
+    }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    fun handleAccessDeniedException(e: AccessDeniedException): RespWrapper {
+        if (SpringUtils.isDevProfile()) {
+            e.printStackTrace()
+        }
+        logger.debug("AccessDeniedException  :", e.fillInStackTrace())
+        return RespWrapper(
+            AuthError.ACCESS_DENIED.code,
+            AuthError.ACCESS_DENIED.msg)
     }
 
     @ExceptionHandler(AppException::class)
