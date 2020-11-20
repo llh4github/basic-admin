@@ -1,5 +1,6 @@
 package com.llh.basicadmin.service.sys.impl
 
+import com.llh.basicadmin.common.constant.UserInfoFunCache
 import com.llh.basicadmin.common.exception.AppException
 import com.llh.basicadmin.common.exception.code.AuthError
 import com.llh.basicadmin.common.exception.code.UserError
@@ -15,6 +16,8 @@ import com.llh.basicadmin.service.sys.SysAuthorityService
 import com.llh.basicadmin.service.sys.SysRoleService
 import com.llh.basicadmin.service.sys.SysUserService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.cache.annotation.CachePut
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -23,6 +26,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
+
 class AccountServiceImpl : AccountService {
     @Autowired
     private lateinit var sysUserService: SysUserService
@@ -40,6 +44,7 @@ class AccountServiceImpl : AccountService {
     @Autowired
     private lateinit var authenticationManager: AuthenticationManager
 
+    @Cacheable(UserInfoFunCache.prefix + "loadUserByUsername")
     override fun loadUserByUsername(username: String?): UserDetails {
         if (username.isNullOrBlank()) throw UsernameNotFoundException("用户名为空")
         val model = sysUserService.findByUsername(username)

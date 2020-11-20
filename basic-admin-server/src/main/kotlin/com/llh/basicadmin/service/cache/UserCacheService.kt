@@ -32,18 +32,19 @@ class UserCacheService {
             Key.loginHMKey_refresh to tokenVo.refresh,
             Key.loginHMKey_userInfo to JacksonUtils.writeValueAsString(vo),
         )
-        redisDao.hmset(Key.loginInfoKey(vo.id), hashMap)
+        redisDao.hmset(Key.loginInfoKey("${vo.id}"), hashMap)
     }
 
-    fun getLoginAccessToken(userId: Int): String? {
+    fun getLoginAccessToken(userId: String): String? {
         return getLoginInfo(userId, Key.loginHMKey_access)
     }
 
-    fun getLoginRefreshToken(userId: Int): String? {
+    fun getLoginRefreshToken(userId: String): String? {
         return getLoginInfo(userId, Key.loginHMKey_refresh)
     }
 
-    fun getLoginUserInfo(userId: Int): AccountInfo? {
+    fun getLoginUserInfo(userId: String): AccountInfo? {
+
         return JacksonUtils.readValue(
             getLoginInfo(userId, Key.loginHMKey_userInfo),
             AccountInfo::class.java)
@@ -54,7 +55,7 @@ class UserCacheService {
      *
      * 返回的是map
      */
-    private fun getLoginInfo(userId: Int, hmKey: String): String? {
+    private fun getLoginInfo(userId: String, hmKey: String): String? {
         val map = redisDao.hmget(Key.loginInfoKey(userId))
         return map[hmKey] as String?
     }

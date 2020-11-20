@@ -4,6 +4,7 @@ import com.llh.basicadmin.model.SysUser
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
+
 /**
  * 帐户信息
  * Created At 2020/11/9 17:39
@@ -12,9 +13,11 @@ import org.springframework.security.core.userdetails.UserDetails
  */
 class AccountInfo(private val user: SysUser) : UserDetails {
 
+    val id: Int? = user.id
+
+
     private val authoritySet = mutableSetOf<GrantedAuthority>()
 
-    val id: Int? = user.id
 
     fun addAuthorities(authority: List<GrantedAuthority>) {
         if (authority.isEmpty()) return
@@ -32,6 +35,7 @@ class AccountInfo(private val user: SysUser) : UserDetails {
     override fun getUsername(): String {
         return user.username
     }
+
 
     override fun isAccountNonExpired(): Boolean {
         return true
