@@ -185,10 +185,14 @@ class JwtAuthenticationTokenFilter(private var config: JwtConfig)
      */
     private fun saveUserInfoInSecurityContext(username: String) {
         val loginUserInfo = accountService.loadUserByUsername(username)
-        SecurityContextHolder.getContext()
-            .authentication = UsernamePasswordAuthenticationToken(
+        val authenticationToken = UsernamePasswordAuthenticationToken(
             loginUserInfo?.username,
             loginUserInfo?.password,
             loginUserInfo?.authorities)
+        // 用户信息放在 details 字段里，可以在程序其他地方获取用户信息
+        authenticationToken.details = loginUserInfo
+        SecurityContextHolder
+            .getContext()
+            .authentication = authenticationToken
     }
 }
