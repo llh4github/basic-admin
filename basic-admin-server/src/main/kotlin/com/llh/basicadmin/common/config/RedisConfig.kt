@@ -45,25 +45,4 @@ class RedisConfig : CachingConfigurerSupport() {
     }
 
 
-
-    @Bean
-    fun cacheManager(factory: RedisConnectionFactory): CacheManager {
-        val stringRedisSerializer = StringRedisSerializer()
-        val genericJackson2JsonRedisSerializer = GenericJackson2JsonRedisSerializer()
-        // 配置序列化（解决乱码的问题）
-        val config = RedisCacheConfiguration.defaultCacheConfig()
-            .entryTtl(timeToLive)
-            .serializeKeysWith(RedisSerializationContext
-                .SerializationPair
-                .fromSerializer(stringRedisSerializer))
-            .serializeValuesWith(RedisSerializationContext
-                .SerializationPair
-                .fromSerializer(genericJackson2JsonRedisSerializer))
-            .disableCachingNullValues()
-
-        return RedisCacheManager.builder(factory)
-            .cacheDefaults(config)
-            .build()
-    }
-
 }
