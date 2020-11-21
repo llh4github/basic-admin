@@ -8,6 +8,7 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -27,14 +28,14 @@ class AccountInfoAPI {
 
     @PostMapping("register")
     @ApiOperation("注册帐户")
-    fun register(account: AccountVO): RespWrapper {
+    fun register(@RequestBody account: AccountVO): RespWrapper {
         val operation: Boolean = accountService.register(account)
         return okResponse(operation)
     }
 
     @PostMapping("login")
     @ApiOperation("登录")
-    fun login(account: AccountVO): RespWrapper {
+    fun login(@RequestBody account: AccountVO): RespWrapper {
         val operation = accountService.login(account)
         return okResponse(operation)
     }

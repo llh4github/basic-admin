@@ -7,6 +7,7 @@ import com.llh.basicadmin.common.util.SpringUtils
 import com.llh.basicadmin.pojo.RespWrapper
 import org.apache.logging.log4j.kotlin.Logging
 import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -51,6 +52,16 @@ class ExceptionRestHandler : Logging {
         }
         logger.debug("App exception :", e.fillInStackTrace())
         return RespWrapper(e.info.getExpCode(), e.info.getExpMsg())
+    }
+
+    @ExceptionHandler(BadCredentialsException::class)
+    fun handleBadCredentialsException(e: BadCredentialsException): RespWrapper {
+        if (SpringUtils.isDevProfile()) {
+            e.printStackTrace()
+        }
+        logger.debug("BadCredentialsException exception :", e.fillInStackTrace())
+        val error = AuthError.NAME_PWD_ERROR
+        return RespWrapper(error.code, error.msg)
     }
 
     /**
