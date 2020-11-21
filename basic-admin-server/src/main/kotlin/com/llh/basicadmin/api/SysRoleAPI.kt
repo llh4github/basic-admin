@@ -10,6 +10,7 @@ import com.llh.basicadmin.common.validation.UpdateOperate
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
 
@@ -40,6 +41,7 @@ class SysRoleAPI {
         return okResponse(model)
     }
 
+    @PreAuthorize("hasRole('admin')")
     @PostMapping(value = ["add"])
     @ApiOperation("添加角色")
     fun add(@RequestBody @Validated(AddOperate::class)

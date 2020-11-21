@@ -46,6 +46,7 @@ enum class AuthError(val code: Int, val msg: String) : ExpInfo {
     LOGIN_ERROR(auth_error + 1, "登录错误"),
     NAME_PWD_ERROR(auth_error + 2, "用户名或密码错误"),
     USER_NOT_EXIST(auth_error + 3, "用户不存在"),
+    ACCESS_DENIED(auth_error + 4, "权限不足"),
     ;
 
     override fun getExpCode(): Int {
@@ -73,6 +74,7 @@ enum class DataError(val code: Int, val msg: String) : ExpInfo {
 enum class UserError(val code: Int, val msg: String) : ExpInfo {
 
     USERNAME_DUPLICATE(user_error + 1, "用户名已存在"),
+
 
     ;
 

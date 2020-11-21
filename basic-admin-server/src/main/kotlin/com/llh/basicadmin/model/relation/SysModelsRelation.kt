@@ -23,3 +23,9 @@ interface SysUserRole : Entity<SysUserRole> {
     var roleId: Int
     var userId: Int
 }
+
+interface SysDeptUser : Entity<SysDeptUser> {
+    var id: Int
+    var deptId: Int
+    var userId: Int
+}

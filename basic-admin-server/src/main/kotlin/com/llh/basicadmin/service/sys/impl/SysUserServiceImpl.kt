@@ -1,5 +1,6 @@
 package com.llh.basicadmin.service.sys.impl
 
+import com.llh.basicadmin.common.constant.UserInfoFunCache
 import com.llh.basicadmin.dao.SysUsers
 import com.llh.basicadmin.dao.relation.SysUserRoles
 import com.llh.basicadmin.model.SysUser
@@ -10,6 +11,7 @@ import org.ktorm.dsl.batchInsert
 import org.ktorm.dsl.delete
 import org.ktorm.dsl.eq
 import org.ktorm.entity.*
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -28,6 +30,7 @@ class SysUserServiceImpl : SysUserService {
     }
 
     @Transactional
+    @CacheEvict(value = [UserInfoFunCache.prefix + "loadUserByUsername" ],key="#model.username")
     override fun updateWithRoles(model: SysUser, roleIds: Set<Int>?): Boolean {
         updateById(model)
         // 删除旧关系

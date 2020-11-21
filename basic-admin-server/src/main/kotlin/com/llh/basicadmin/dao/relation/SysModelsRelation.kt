@@ -1,5 +1,6 @@
 package com.llh.basicadmin.dao.relation
 
+import com.llh.basicadmin.model.relation.SysDeptUser
 import com.llh.basicadmin.model.relation.SysRoleAuthority
 import com.llh.basicadmin.model.relation.SysUserRole
 import org.ktorm.schema.Table
@@ -21,4 +22,10 @@ object SysUserRoles : Table<SysUserRole>("sys_user_role") {
     val id = int("id").primaryKey().bindTo { it.id }
     val userId = int("user_id").bindTo { it.userId }
     val roleId = int("role_id").bindTo { it.roleId }
+}
+
+object SysDeptUsers : Table<SysDeptUser>("sys_dept_user") {
+    val id = int("id").primaryKey().bindTo { it.id }
+    val userId = int("user_id").bindTo { it.userId }
+    val deptId = int("dept_id").bindTo { it.deptId }
 }
