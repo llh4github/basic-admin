@@ -1,75 +1,83 @@
 import axios from 'axios'
-import storage from 'store'
-import notification from 'ant-design-vue/es/notification'
-import { VueAxios } from './axios'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { MessageBox, Message } from 'element-ui'
+import store from '@/store'
+import { getToken } from '@/utils/auth'
 
-// 创建 axios 实例
-const request = axios.create({
-  // API 请求的默认前缀
-  baseURL: process.env.VUE_APP_API_BASE_URL,
-  timeout: 6000 // 请求超时时间
+// create an axios instance
+const service = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // withCredentials: true, // send cookies when cross-domain requests
+  timeout: 5000 // request timeout
 })
 
-// 异常拦截处理器
-const errorHandler = (error) => {
-  console.log('err: ', error)
-  notification.error({
-    message: '请求错误',
-    description: error.msg
-  })
-  return Promise.reject(error)
-}
-
 // request interceptor
-request.interceptors.request.use(config => {
-  const token = storage.get(ACCESS_TOKEN)
-  // 如果 token 存在
-  // 让每个请求携带自定义 token 请根据实际情况自行修改
-  if (token) {
-    config.headers['access_token'] = token
+service.interceptors.request.use(
+  config => {
+    // do something before request is sent
+
+    if (store.getters.access) {
+      // let each request carry token
+      config.headers['access_token'] = getToken()
+    }
+    return config
+  },
+  error => {
+    // do something with request error
+    console.log(error) // for debug
+    return Promise.reject(error)
   }
-  return config
-}, errorHandler)
+)
 
 // response interceptor
-request.interceptors.response.use((response) => {
-  console.log(response)
-  const status = response.status
-  if (status !== 200) {
-    notification.error({
-      message: '请求错误',
-      description: response.error
-    })
-    return Promise.reject(response)
-  }
-  const res = response.data
-  if (res.code !== 1) {
-    if (res.code === 40102) {
-      notification.error({
-        message: '访问错误',
-        description: res.msg
+service.interceptors.response.use(
+  /**
+   * If you want to get http information such as headers or status
+   * Please return  response => response
+   */
+
+  /**
+   * Determine the request status by custom code
+   * Here is just an example
+   * You can also judge the status by HTTP Status Code
+   */
+  response => {
+    const res = response.data
+
+    // if the custom code is not 1, it is judged as an error.
+    if (res.code !== 1) {
+      Message({
+        message: res.msg || 'Error',
+        type: 'error',
+        duration: 5 * 1000
       })
+
+      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
+      if (res.code === 40101 || res.code === 50012 || res.code === 50014) {
+        // to re-login
+        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+          confirmButtonText: 'Re-Login',
+          cancelButtonText: 'Cancel',
+          type: 'warning'
+        }).then(() => {
+          store.dispatch('user/resetToken').then(() => {
+            location.reload()
+          })
+        })
+      }
+      return Promise.reject(new Error(res.msg || 'Error'))
     } else {
-      notification.error({
-        description: res.msg
-      })
+      return res
     }
-    return Promise.reject(response)
+  },
+  error => {
+    console.log('axios response interceptor  ' + error) // for debug
+    Message({
+      message: error.message,
+      type: 'error',
+      duration: 5 * 1000
+    })
+    return Promise.reject(error)
   }
-  return response.data
-}, errorHandler)
+)
 
-const installer = {
-  vm: {},
-  install (Vue) {
-    Vue.use(VueAxios, request)
-  }
-}
-
-export default request
-
-export {
-  installer as VueAxios,
-  request as axios
-}
+export default service
