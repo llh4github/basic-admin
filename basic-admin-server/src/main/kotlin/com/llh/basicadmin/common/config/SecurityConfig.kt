@@ -11,6 +11,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -56,46 +57,44 @@ class SecurityConfig : WebSecurityConfigurerAdapter(), WebMvcConfigurer {
             .allowedMethods("*")
             .allowedHeaders("*")
             .allowCredentials(true)
-            .maxAge(3600L * 24) //maxAge(3600)表明在3600秒内，不需要再发送预检验请求，可以缓存该结果
+            .allowedOrigins("*")
+//            .exposedHeaders()
+            .maxAge(3L) //maxAge(3600)表明在3600秒内，不需要再发送预检验请求，可以缓存该结果
     }
 
     override fun configure(http: HttpSecurity) {
-        http {
-            csrf {
-                disable() // 取消表单请求跨域保护
-            }
-            cors {
-                disable() //
-            }
-            sessionManagement {
-                // 基于token，所以不需要session
-                sessionCreationPolicy = SessionCreationPolicy.STATELESS
-            }
-            authorizeRequests {
-                authorize("/", permitAll)
-                authorize("/*.html", permitAll)
-                authorize("/**/*.js", permitAll)
-                authorize("/**/*.html", permitAll)
-                authorize("/**/*.css", permitAll)
-                authorize("/swagger/**", permitAll)
-                authorize("/actuator/**", permitAll)
-                authorize("/v2/api-docs", permitAll)
-                authorize("/swagger-ui.html", permitAll)
-                authorize("/swagger-resources/**", permitAll)
-                authorize("/druid/**", permitAll)
-                authorize("/webjars/**", permitAll)
-                authorize("/favicon.ico", permitAll)
+        http.cors().disable()
+            .csrf().disable()
+            // 基于token，所以不需要session
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http.authorizeRequests()
+            .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+            .antMatchers(HttpMethod.GET,
+                "/",
+                "/*.html",
+                "/**/*.js",
+                "/**/*.html",
+                "/**/*.css",
+                "/swagger/**",
+                "/actuator/**",
+                "/v2/api-docs",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/webjars/**",
+                "/druid/**",
+                "/favicon.ico"
+            ).permitAll()
+            .antMatchers("/account/**").permitAll()
+            .anyRequest().authenticated()
+
+        // 添加JWT filter
+        http.addFilterBefore(jwtTokenFilter,
+            UsernamePasswordAuthenticationFilter::class.java)
+        // 异常处理（登陆失败的处理）
+        http.exceptionHandling()
+            .authenticationEntryPoint(UnauthorizedEntryPoint())
 
 
-                authorize("/account/**", permitAll)
-                authorize()
-            }
-
-            addFilterAt(jwtTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
-            exceptionHandling {
-                authenticationEntryPoint = UnauthorizedEntryPoint()
-            }
-        }
     }
 
     override fun configure(auth: AuthenticationManagerBuilder?) {
@@ -164,7 +163,7 @@ class JwtAuthenticationTokenFilter(private var config: JwtConfig)
         val refreshToken: String? = request.getHeader(config.refreshToken)
 
         // 必须有相关信息
-        if (authToken.isNullOrEmpty() || refreshToken.isNullOrEmpty()) {
+        if (authToken.isNullOrEmpty()) {
             filterChain.doFilter(request, response)
             return
         }
@@ -178,7 +177,7 @@ class JwtAuthenticationTokenFilter(private var config: JwtConfig)
             }
         }
         // 验证 refreshToken 没有过期
-        if (JwtTokenUtil.validateToken(refreshToken)) {
+        if (!refreshToken.isNullOrEmpty() && JwtTokenUtil.validateToken(refreshToken)) {
             val requestURL = request.requestURL
             // 指定接口才能访问
             if (requestURL.endsWith("/account/refresh")) {
