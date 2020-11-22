@@ -1,8 +1,10 @@
 package com.llh.basicadmin.api
 
+import com.llh.basicadmin.common.util.UserUtils
 import com.llh.basicadmin.pojo.AccountVO
 import com.llh.basicadmin.pojo.RespWrapper
 import com.llh.basicadmin.pojo.okResponse
+import com.llh.basicadmin.service.cache.UserCacheService
 import com.llh.basicadmin.service.sys.AccountService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -26,6 +28,9 @@ class AccountInfoAPI {
     @Autowired
     private lateinit var accountService: AccountService
 
+    @Autowired
+    private lateinit var userCacheService: UserCacheService
+
     @PostMapping("register")
     @ApiOperation("注册帐户")
     fun register(@RequestBody account: AccountVO): RespWrapper {
@@ -38,5 +43,12 @@ class AccountInfoAPI {
     fun login(@RequestBody account: AccountVO): RespWrapper {
         val operation = accountService.login(account)
         return okResponse(operation)
+    }
+
+    @PostMapping("logout")
+    @ApiOperation("登出")
+    fun logout(): RespWrapper {
+        userCacheService.cleanLoginInfo(UserUtils.currentUserId())
+        return okResponse(true)
     }
 }

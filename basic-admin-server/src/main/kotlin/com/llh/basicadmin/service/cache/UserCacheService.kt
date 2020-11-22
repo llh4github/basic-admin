@@ -33,6 +33,10 @@ class UserCacheService {
         redisDao.hmset(Key.loginInfoKey("${vo.id}"), hashMap)
     }
 
+    fun cleanLoginInfo(userId: Int) {
+        redisDao.del(Key.loginInfoKey("$userId"))
+    }
+
     fun getLoginAccessToken(userId: String): String? {
         return getLoginInfo(userId, Key.loginHMKey_access)
     }
