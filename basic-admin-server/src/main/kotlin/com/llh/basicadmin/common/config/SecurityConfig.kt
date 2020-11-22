@@ -58,8 +58,7 @@ class SecurityConfig : WebSecurityConfigurerAdapter(), WebMvcConfigurer {
             .allowedHeaders("*")
             .allowCredentials(true)
             .allowedOrigins("*")
-//            .exposedHeaders()
-            .maxAge(3L) //maxAge(3600)表明在3600秒内，不需要再发送预检验请求，可以缓存该结果
+            .maxAge(3600L) //maxAge(3600)表明在3600秒内，不需要再发送预检验请求，可以缓存该结果
     }
 
     override fun configure(http: HttpSecurity) {
