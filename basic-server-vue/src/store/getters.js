@@ -1,16 +1,10 @@
 const getters = {
-  isMobile: state => state.app.isMobile,
-  lang: state => state.app.lang,
-  theme: state => state.app.theme,
-  color: state => state.app.color,
-  token: state => state.user.token,
+  sidebar: state => state.app.sidebar,
+  device: state => state.app.device,
+  token: state => state.user.access,
+  access: state => state.user.access,
+  refresh: state => state.user.access,
   avatar: state => state.user.avatar,
-  nickname: state => state.user.name,
-  welcome: state => state.user.welcome,
-  roles: state => state.user.roles,
-  userInfo: state => state.user.info,
-  addRouters: state => state.permission.addRouters,
-  multiTab: state => state.app.multiTab
+  name: state => state.user.name
 }
-
 export default getters

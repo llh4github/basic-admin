@@ -1,76 +1,64 @@
 import router from './router'
 import store from './store'
-import storage from 'store'
+import { Message } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
-import '@/components/NProgress/nprogress.less' // progress bar custom style
-import notification from 'ant-design-vue/es/notification'
-import { setDocumentTitle, domTitle } from '@/utils/domUtil'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { i18nRender } from '@/locales'
+import 'nprogress/nprogress.css' // progress bar style
+import { getToken } from '@/utils/auth' // get token from cookie
+import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const allowList = ['login', 'register', 'registerResult'] // no redirect allowList
-const loginRoutePath = '/user/login'
-const defaultRoutePath = '/dashboard/workplace'
+const whiteList = ['/login'] // no redirect whitelist
 
-router.beforeEach((to, from, next) => {
-  NProgress.start() // start progress bar
-  to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`))
-  /* has token */
-  if (storage.get(ACCESS_TOKEN)) {
-    if (to.path === loginRoutePath) {
-      next({ path: defaultRoutePath })
+router.beforeEach(async(to, from, next) => {
+  // start progress bar
+  NProgress.start()
+
+  // set page title
+  document.title = getPageTitle(to.meta.title)
+
+  // determine whether the user has logged in
+  const hasToken = getToken()
+
+  if (hasToken) {
+    if (to.path === '/login') {
+      // if is logged in, redirect to the home page
+      next({ path: '/' })
       NProgress.done()
     } else {
-      // check login user.roles is null
-      if (store.getters.roles.length === 0) {
-        // request login userInfo
-        store
-          .dispatch('GetInfo')
-          .then(res => {
-            const roles = res.result && res.result.role
-            // generate dynamic router
-            store.dispatch('GenerateRoutes', { roles }).then(() => {
-              // 根据roles权限生成可访问的路由表
-              // 动态添加可访问路由表
-              router.addRoutes(store.getters.addRouters)
-              // 请求带有 redirect 重定向时，登录自动重定向到该地址
-              const redirect = decodeURIComponent(from.query.redirect || to.path)
-              if (to.path === redirect) {
-                // set the replace: true so the navigation will not leave a history record
-                next({ ...to, replace: true })
-              } else {
-                // 跳转到目的路由
-                next({ path: redirect })
-              }
-            })
-          })
-          .catch(() => {
-            notification.error({
-              message: '错误',
-              description: '请求用户信息失败，请重试'
-            })
-            // 失败时，获取用户信息失败时，调用登出，来清空历史保留信息
-            store.dispatch('Logout').then(() => {
-              next({ path: loginRoutePath, query: { redirect: to.fullPath } })
-            })
-          })
-      } else {
+      const hasGetUserInfo = store.getters.name
+      if (hasGetUserInfo) {
         next()
+      } else {
+        try {
+          // get user info
+          await store.dispatch('user/getInfo')
+
+          next()
+        } catch (error) {
+          // remove token and go to login page to re-login
+          await store.dispatch('user/resetToken')
+          Message.error(error || 'Has Error')
+          next(`/login?redirect=${to.path}`)
+          NProgress.done()
+        }
       }
     }
   } else {
-    if (allowList.includes(to.name)) {
-      // 在免登录名单，直接进入
+    /* has no token*/
+
+    if (whiteList.indexOf(to.path) !== -1) {
+      // in the free login whitelist, go directly
       next()
     } else {
-      next({ path: loginRoutePath, query: { redirect: to.fullPath } })
-      NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
+      // other pages that do not have permission to access are redirected to the login page.
+      next(`/login?redirect=${to.path}`)
+      NProgress.done()
     }
   }
 })
 
 router.afterEach(() => {
-  NProgress.done() // finish progress bar
+  // finish progress bar
+  NProgress.done()
 })
