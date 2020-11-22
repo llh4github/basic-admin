@@ -1,10 +1,13 @@
 package com.llh.basicadmin.api
 
+import com.llh.basicadmin.common.constant.ROLE_PREFIX
+import com.llh.basicadmin.common.util.UserUtils
 import com.llh.basicadmin.common.validation.AddOperate
 import com.llh.basicadmin.common.validation.UpdateOperate
 import com.llh.basicadmin.model.SysUser
 import com.llh.basicadmin.pojo.RespWrapper
 import com.llh.basicadmin.pojo.okResponse
+import com.llh.basicadmin.pojo.vo.UserInfoVO
 import com.llh.basicadmin.pojo.vo.UserVO
 import com.llh.basicadmin.service.sys.SysUserService
 import io.swagger.annotations.Api
@@ -51,5 +54,28 @@ class SysUserAPI {
         }
         val updated = sysUserService.saveWithRoles(model, userVO.roles)
         return okResponse(updated)
+    }
+
+    @GetMapping("info")
+    @ApiOperation("获取当前用户信息")
+    @CrossOrigin
+    fun getInfo(): RespWrapper {
+        val user = UserUtils.currentUser()
+
+        val authorities = user.authorities
+        val roles = authorities
+            .filter { it.authority.startsWith(ROLE_PREFIX) }
+            .map { it.authority }
+            .toSet()
+        val permissions = authorities
+            .filter { !it.authority.startsWith(ROLE_PREFIX) }
+            .map { it.authority }
+            .toSet()
+        val info = UserInfoVO(
+            username = user.username,
+            roles = roles,
+            permissions = permissions
+        )
+        return okResponse(info)
     }
 }
